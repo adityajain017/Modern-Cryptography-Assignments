@@ -1,0 +1,98 @@
+Commands Used
+--------------
+1. go
+2. read
+3. enter
+4. read
+
+Cryptosystem Used
+-----------------
+Substitution Cipher
+
+
+Decryption Logic/Analysis
+--------------------------
+We wrote a C++ code to implement the following logic for decryption. Code is uploaded in the Q6's answer.
+
+We found following reasons to beleive that spaces in the ciphered text are random and are not according the English Language:
+1. Letters after full stop were capital which suggests that English formatting around punctuation is followed. But spaces in the message are uneven, in some places there were spaces before full stop and in some places there were after it. There are no consistency. 
+2. After the excalmation mark ("!") there is no space. 
+3. There are 3 single letter words in the ciphered message - 'P', 'a', and 'y'. Whereas in English language there is only two single letter words - 'A' and 'I'
+
+Above points prompts us to remove the spaces from the message. 
+
+After removing spaces we found many combination of letters are repeating in the message like "iepjoys" is repeated 3 times, "mey" is repeated 8 times, "mewa" is repeated 3 times, "wa" is repeated 7 times, "gt" is repeated thrice, "whmysyam" is repeated twice and many more. This suggests that encryption method is substitution. 
+
+So we performed the frequency analysis on the cipher text and obtained the following result: 
+y - 13.9535%
+m - 10.8527%
+a - 10.4651%
+w - 9.68992%
+e - 8.52713%
+g - 5.42636%
+p - 5.03876%
+h - 4.65116%
+i - 3.48837%
+o - 2.71318%
+t - 2.32558%
+r - 1.93798%
+v - 1.55039%
+x - 1.16279%
+b - 0.775194%
+
+Since percentage of 'y' is 13.9% and there is exist a gap of 3% from the next highest frequency we assumed that 'e' is substituted with 'y' (e->y) and 't' with 'm' (t->m). After this substitution "mey" which is repeated 8 times becomes a 3 letter word which starts with 't' and ends with 'e'. Since "the" is the most common word in English language, we substitute 'e' with 'h' (e->h). 
+
+After this substitution we break the word "the" from the cipher by adding spaces. Since in English language word "the" follows a preposition (in,on,at,of,for,or). The string "gt" preceedes the word "the" in this partially decrypted message twice, by bruteforcing among the preposition we found the substitution 'o'->'g' and 'f'->'t' we guessed "wa" to be as "is" as it made "mewa" to the word "this" which is repeated 3 times and induces the preposition "is" in 4 other places. So we finalized: 'i'->'w' and 's'->'a'. 
+
+Same proposition theory applied to "i_ the" which deciphers to "in the" and hence maps 'n'->'h'.
+
+In the Frequency distribution table of English text next letters are 'a' and 'o'. So we tried both of them for the letters 'g' and 'p' which are next in the frequency distribution of cipher text. After brute force we found the mapping - 'o'->'g' and 'a'->'p'.
+
+Some of the interesting guesses are:
+1. By looking at 'of inte_est' ,we can say the word is 'interest'. 'r' -> 's'.
+2. By looking at the string "the re is not hin_ of interest", the actual sentence seems like "there is nothin_ of interest". 'nothin_' looks like 'nothing', So, 'g' -> 'r'.
+
+After this it was pretty much easy guessing up the words to decipher the whole text.
+
+Solving the substitution on the digits
+--------------------------------------
+"Digits have been shifted by 8 places." - the clause in the deciphered text by substituting the alphabets. Since 8 is a digit, which means digits are not exactly shifted by 8 places as eight in the clause is also shifted. Let us consider that x is the number of places by which digits are shifted. So the clause before ciphered is like - "Digits have been shifted by x places."
+
+Hence (x+x)mod10=8. This leads to two solution of x - either x=4 or x=9. By this two possible password exists: "tyRgU69diqq" and "tyRgU14diqq". We tried both of them in the game and found "tyRgU69diqq" as the password.
+
+
+Plain Text after deciphering alphabet substitution only
+-------------------------------------------------------
+This is the first chamber of the caves. As you can see, there is nothing of interest in the chamber. Some of the later chambers will be more interesting than this one ! The code used for this message is a simple substitution cipher in which digits have been shifted by 8 places. The password is tyRgU03diqq without the quotes.
+
+
+
+Cipher Text
+------------
+wsam ie pjo ysgtm eyipbya .P axg niphay y, mey syw ahgm ewhrg tw hmysyam wh meyiepjo ys .Ag jygtmeyk pmys ie pjo ysavw kkoyjgsy whmy sy amwh rmephmewagh y!Me yigu ynay utg smew ajya apr ywap awjfkya no a mwmnmw ghiwfeyswhve wieuwr wm aepby oyyhae wtmy uox8 fkpiya. Me y fpaavgs uwa mxSrN03u wd dvwmegnmmey dngmya. Mew awameyt
+
+
+Mapping
+--------
+
+Plain text -> Cipher text
+	e  ->   y
+	t  ->   m
+	s  ->   a
+	i  ->   w
+	h  ->   e
+	o  ->   g
+	a  ->   p
+	n  ->   h
+	c  ->   i
+	b  ->   o
+	f  ->   t
+	g  ->   r
+	w  ->   v
+	y  ->   x
+	v  ->   b
+		
+
+Password
+----------
+tyRgU69diqq

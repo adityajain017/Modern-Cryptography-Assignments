@@ -1,0 +1,19 @@
+Commands
+----------
+go->dive->dive->back->pull->go->(Here we went to the level 3)back->go->wave->(now we need to go back to level 4)back->back->thrnxxtzy->read->3608528850368400786036725->read->password
+
+Cryptosystem
+-------------
+
+
+Analysis
+---------
+
+
+
+
+Password
+----------
+
+
+

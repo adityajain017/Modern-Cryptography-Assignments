@@ -1,0 +1,79 @@
+Commands
+----------
+go->enter->pluck->back->give->back->back->thrnxxtzy->read
+
+Analysis
+---------
+We are provided with 3 equations:
+$$ password*g^{324} \mod p = 11226815350263531814963336315 $$   - (1)
+$$ password*g^{2345} \mod p= 9190548667900274300830391220 $$    - (2)
+$$ password*g^{9513} \mod p= 4138652629655613570819000497 $$   - (3)
+
+It is given that all the numbers in the above equation are the elements of a multiplicative group $$Z_p^*$$ where p is a prime number and p =19807040628566084398385987581. 
+Following are some of the properties of the multiplicative group $$Z_p^*$$ that we will use in our solution:
+P1: Every element 'a' in the group has an inverse element $$a^{-1}$$, such that 
+     product of both is equal to the identity element 'e'.
+     $$ a* a^{-1} = e$$
+P2: Order of the multiplicative group is Euler totient $$ \phi(p) =  p-1 $$.
+P3: Identity element 'e' of the group is equal to 1.
+
+Solution:
+----------
+We take out the inverse of equation (1) and then multiply it with equation (2):
+$$ (password*g^{324})^{-1} * (password*g^{2345}) \mod p= (11226815350263531814963336315)^{-1} * 9190548667900274300830391220 $$
+
+We wrote a python program to calculate the inverse of an element in the multiplicative group $$Z_p^*$$ and we used this program to calculate the inverse of 11226815350263531814963336315. The program's code is uploaded in the submission of Q5.
+$$ password^{-1}* password* g^{-324}* g^{2345} \mod p= (17983774594023309985368857902) * 9190548667900274300830391220 $$
+
+From the Property P1 -  $$ password^{-1}* password = 1 $$. Therefore,
+$$ g^{2021} \mod p = 7021284369301638640577066679 $$   - (4)
+
+Similarily we took inverse of equation (1) and then multiply it with equation (3). We get:
+$$ g^{9189} \mod p = 3426347385144995225825016781 $$   - (5)
+
+Calculation of value of g
+--------------------------
+Theorem - Fermat's Law : When g and p are coprime, $$ g^{p-1} \mod p = 1 $$
+
+We can write Fermat's law as follows:
+$$ g * g^{p-2} \mod p = 1 $$
+$$ g *  [(g^{2021})^x * (g^{9189})^y] \mod p = 1 $$    - (6)
+
+So, g is equal to the inverse of $$g^{p-2}$$.
+
+So to calculate $$g^{p-2}$$ from equation (4) and (5), we applied Diophantine Equation solution. We converted our problem as follows:
+$$ 2021x + 9189y = p-2 $$
+
+We used the python library - sympy.solvers.diophantine to generate the solution to the above diophantine equation. After solving we get set of linearly dependent infinite solutions for x and y. 
+$$ x =9189*i +12518049677253765339779944149928 $$ and 
+$$ y = -2021*i - 27531786473706857313756522734812753178647370685731375652273481$$ $$\forall i \in Z $$
+
+We plugged different values of x and y in equation (6) by changing the value of i and then matched the value of g with the hint given by the game. After plugging we got:
+$$ g * 726117032386935245054894092 \mod p = 1 $$
+So, $$ g = 726117032386935245054894092^{-1} $$
+
+$$ \Rightarroow g = 192847283928500239481729 $$
+
+Since this value of g matches with the hint provided to us by the game. We used this value of g to calculate the value of password as follows: 
+
+Calculation of Password
+-------------------------
+Plugging the value of g in the equation (1):
+$$ password*(192847283928500239481729)^{324} \mod p= 11226815350263531814963336315 $$
+
+$$ \Rightarrow password*(10900623124966429218667385137) \mod p= 11226815350263531814963336315 $$
+
+Multiplying with inverse of the element 10900623124966429218667385137 on both LHS and RHS:
+$$ \Rightarrow password*(10900623124966429218667385137)*(10900623124966429218667385137)^{-1} \mod p= 11226815350263531814963336315*(10900623124966429218667385137)^{-1} $$
+
+$$ \Rightarrow password = 11226815350263531814963336315 * 7280920143223660694435112264 $$
+
+$$ \Rightarrow password = 3608528850368400786036725 $$
+
+
+
+Password
+----------
+password = 3608528850368400786036725
+
+
