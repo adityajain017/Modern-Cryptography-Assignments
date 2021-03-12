@@ -4,16 +4,82 @@ go->dive->dive->back->pull->go->(Here we went to the level 3)back->go->wave->(no
 
 Cryptosystem
 -------------
-
+DES: 6 Round
 
 Analysis
 ---------
+To break 6 round DES, we applied two 3-round characteristics. 
+First Characteristic:
+-------------------
+We choose plaintext such as their XOR values after initial permutation is equal to 0x04000000 40080000, i.e. $$IP(P_1) \oplus IP(P_2) = 0x04000000 40080000$$. So their XOR values before initial permutation (the one we submit to the game) should be equal to 0x00008010 00004000, i.e., $$P_1 \oplus P_2 = 0x00008010 00004000$$. As shown in Figure - charact1.jpeg, the XOR values at the end 3rd round ($$L_3R_3$$) will be equal to 0x04000000 40080000 with probability 0.0625.
 
+XOR of $$R_3 = 0x40080000  = (0100 0000 0000 1000 0000 0000 0000 0000)_{2}$$
+XOR of $$ E(R_3) = (001000 000000 000001 010000 000000 000000 000000 000000)_{2} $$
+Since XOR of $$R_3 = 0x40080000$$, XOR inputs to the S-boxes - S2, S5, S6, S7, and S8 of round 4 are zero. This means that the value of two plaintexts is the same at the input of the S-box since the input is same, their output will also be the same. So the output of these five S-boxes is zero. By permuting these outputs of S-boxes, we obtain the corresponding bits of the left half of round 5 ($$L_5$$).
 
+In round 6, now we know XOR of both $$L_5$$ and $$R_5$$ ($$R_5 = L_6$$, where $$L_6$$ is part of the ciphertext). From $$R_5$$, we calculated the XOR of the input to the S-box. Since we know XOR of $$L_5$$ and $$R_6$$, we obtained XOR output of the permutation by $$P_{out} = R_6 \oplus L_5$$. By reverse permuting the $$P_{out}$$, we calculated the XOR output of S-box. 
+Knowing the XOR of the input and output to some of the S-boxes, we enumerated the set $$K_6$$ with 16 possible values for bits of the key corresponding to the 5 S-boxes - S2, S5, S6, S7, and S8. 
+
+Let $$E(R_5) = \alpha_1\alpha_2......\alpha_8$$ and $$E(R_5') = \alpha_1'\alpha_2'......\alpha_8'$$.
+$$R_5$$ and $$R_5'$$ are right-halves of input of sixth round on the plaintexts $$L_0R_0$$ and $$L_0'R_0'$$ = $$L_0'R_0$$.
+
+Let $$\beta_i$$ = $$\alpha_i \oplus k_{6,i}$$ and $$\beta_i'$$ = $$\alpha_i' \oplus k_{6,i}$$. Where $$k_6$$ is the 6th round key such that $$k_6 = k_{6,1},k_{6,2},....,k_{6,8}$$
+
+Let $$\gamma_i = S_{i}(\beta_i)$$ and $$\gamma_i'$$ = $$S_i(\beta_i')$$ 
+
+We know $$\alpha_i$$, $$\alpha_i'$$ and $$\beta_i \oplus \beta_i' = \alpha_i \oplus \alpha_i' = 000000$$  and we also know a value $$\gamma$$ such that $$\gamma_i \oplus  \gamma_i' = \gamma = 0000$$ for $$ i = {2,5,6,7,8} $$ with probability 0.0625.
+
+We defined $$X_i$$ = $$\{(\beta, \beta')$$ $$|$$ $$\beta \oplus \beta' = \beta_i \oplus \beta_i'$$ and $$S_i(\beta) \oplus S_i(\beta') = \gamma_i \oplus \gamma_i'=\gamma\}$$.
+Pair ($$\beta_i,\beta_i'$$) $$\in$$ $$X_i$$. Then let $$K_i$$ = $$\{k$$ $$|$$ $$\alpha_i \oplus k = \beta$$ and ($$\beta,\beta'$$) $$\in$$ $$X_i$$ for some $$\beta'\}$$
+
+Since ($$\beta_i,\beta_i'$$) $$\in$$ $$X_i$$, we have $$k_{4,i}$$ $$\in$$ $$K_i$$
+$$|K_i| = |X_i|$$ and hence, $$|K_i| \leq 16$$.
+
+Due to the probabilistic nature of characteristic, each input pair do not suggest the correct key. We take the one which occurs most often over many input pairs. We repeated the above process for 1000 pairs of plaintexts and we get the following key bits corresponding to 5 of the S-boxes:
+
+Key bits corresponding to the blocks:
+S2: 010001
+S5: 110010
+S6: 000101
+S7: 010011
+S8: 000100
+
+Similarly, find the other 30 bits of S1, S2, S4, S5, S6 using the second characteristic.
+
+Second Characteristics
+-----------------
+Here we choose plaintext such as their XOR values after initial permutation is equal to 0x00200008 00000400, i.e., their XOR values before initial permutation should be equal to 0x00000801 00100000. 
+Figure characteristics2.jpeg shows that 0x00200008 00000400 comes out to be the output of the 3rd round of DES and after expansion in the 4th round, input to the five S-boxes - S1, S2, S4, S5, S6 is zero and hence their output is the same. 
+
+After following the same strategy we used for First Characteristics, we get the following key bits corresponding to 5 of the S-boxes:
+S1: 010101
+S2: 010001
+S4: 010011
+S5: 110010
+S6: 000101
+
+Bruteforcing unknown bits of the Key
+--------------------------
+So now we have 42 out of 48 bits of the key $$k_6$$:  
+010101 010001 XXXXXX 010011 110010 000101 010011 000100
+
+We then applied Permuted Choice 2 (PC2) and shift[] matrix on this obtained $$k_6$$ to obtain the following 56 bits of the key of DES: 
+X11X1X0 1011X10 0X11X11 0000001 0101110 0010111 101011X XXXXXXX
+
+We generated all $$2^{14}$$ possible keys by iterating over all 14 unknown bits. We have the plaintext-ciphertext pair ’ffffffff ffffffff’ - 'qfpouphs gqnmkfkg' respectively. We then encode the plaintext ’ffffffff ffffffff’ with every possible key combination. The following key generated the ciphertext 'qfpouphs gqnmkfkg' and hence it is the key used by the game.
+Key (56 bit) = 0110111 0010111 1001111 0110000 0001010 0111000 1011111 1011011 
+
+Decrypting DES to generate password
+------------------------
+Our encrypted password is: "ilolsriqmpikqhfurpuronilnjfpnpqp"
+After applying the DES decryption algorithm on the encrypted password we obtained the password:
+"osuvgbekjq000000" 
+
+Here last 6 digits are padding and the password which cleared the level is: "osuvgbekjq"
 
 
 Password
 ----------
-
+osuvgbekjq
 
 
