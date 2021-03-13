@@ -1,50 +1,58 @@
-#include <bits/stdc++.h>
+#include<iostream>
+#include<bits/stdc++.h>
 using namespace std;
 
-int hexCharToInt(char a){	//0-f to 0-15
-    if(a>='0' && a<='9')
-        return(a-48);
-    else if(a>='A' && a<='Z')
-        return(a-55);
-    else
-        return(a-87);
-}
+vector<int> Key(8,-1);
+vector<int> charkey;
 
-char IntToChar(int a)	//0-15 to 0-f
+int gen_input_sbox(int n)
 {
-	if(a>-1 && a<10) return (char)(a+48);
-	else return ('a'-10+a);
-}
-
-int feedintobox(int n)
-{
-	int a=n; // preparing 'n' to feed into S box as 'z'
-	int x[6]={0};
-	for (int i = 0; i < 6; ++i)
+	vector<int>v(6,0);
+	for(int i=5;i>=0;i--)
 	{
-		x[5-i]=a%2;
-		a/=2;
+		if(n&1)
+		{
+			v[i]=1;
+		}
+		else
+		{
+			v[i]=0;
+		}
+		n>>=1;
 	}
-	int z=32*x[0] + 8*x[1] + 4*x[2] + 2*x[3] + x[4] + 16*x[5];
-	return z;
+	v[0]*=(1<<5);
+	v[1]*=(1<<3);
+	v[2]*=(1<<2);
+	v[3]*=(1<<1);
+	v[4]*=(1<<0);
+	v[5]*=(1<<4);
+	return  v[0]+v[1]+v[2]+v[3]+v[4]+v[5];
+}
+void bit_encoding(string s,int v[])
+{
+	for(int i=0;i<s.length();i++)
+	{
+		int temp=s[i]-'f';
+		for(int j=4*i+3;j>=4*i;j--)
+		{
+			if(temp&1)
+			{
+				v[j]=1;
+			}
+			else
+			{
+				v[j]=0;
+			}
+			temp>>=1;
+		}
+	}
+	return;
 }
 
-int freq[2][8][64]={0}; // stores candidate's frequency for both input characteristics to identify the key bits
+int 	   permutate_box[]={39,7,47,15,55,23,63,31,38,6,46,14,54,22,62,30,37,5,45,13,53,21,61,29,36,4,44,12,52,20,60,28,35,3,43,11,51,19,59,27,34,2,42,10,50,18,58,26,33,1,41,9,49,17,57,25,32,0,40,8,48,16,56,24};
+int pbox[]={16 ,7 ,20 ,21 ,29 ,12 ,28 ,17, 1 ,15 ,23 ,26 ,5 ,18 ,31 ,10, 2 ,8 ,24 ,14 ,32 ,27 ,3 ,9, 19 ,13 ,30 ,6 ,22 ,11 ,4 ,25};
 
-void func()
-{
-	int ic=0;
-
-	string line1,line2; 
-
-	ifstream myfile1 ("new_output1.txt");
-	ifstream myfile2 ("new_output2.txt");
-	ifstream myfile3 ("new_output3.txt");
-	ifstream myfile4 ("new_output4.txt");
-
-  	int pbox[32]={16 ,7 ,20 ,21 ,29 ,12 ,28 ,17, 1 ,15 ,23 ,26 ,5 ,18 ,31 ,10, 2 ,8 ,24 ,14 ,32 ,27 ,3 ,9, 19 ,13 ,30 ,6 ,22 ,11 ,4 ,25};
-
-	int S[8][64] = {
+	int S[][64] = {
     14, 4, 13, 1, 2, 15, 11, 8, 3 , 10, 6, 12, 5, 9, 0, 7,
     0, 15, 7, 4, 14, 2, 13, 1, 10, 6, 12, 11, 9, 5, 3, 8,
     4, 1 , 14, 8, 13, 6, 2, 11, 15, 12, 9, 7,3, 10, 5, 0,
@@ -85,7 +93,7 @@ void func()
     7, 11, 4, 1, 9, 12, 14, 2, 0, 6, 10, 13, 15, 3, 5, 8, 
     2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11 };
 
-	int expansion[48] =  {
+int expansion[] =  {
     32, 1, 2, 3, 4, 5,
     4, 5, 6, 7, 8, 9,
     8, 9, 10, 11, 12, 13,
@@ -94,301 +102,119 @@ void func()
     20, 21, 22, 23, 24, 25,
     24, 25, 26, 27, 28, 29,
     28, 29, 30, 31, 32, 1 };
-
-	if (myfile1.is_open()&& myfile2.is_open())
-	{	ic=0;
-	while ( getline (myfile1,line1) && getline (myfile2,line2))
+void input_forward(int x[],int l[],int r[])
+{
+	for(int i=0;i<64;i++)
 	{
-	 	if((line1!="")&&(line2!=""))
-		{	
-			int temp1[64],temp2[64],temp[64],l1[32],r1[32],l2[32],r2[32],p,q,pos,arr[6]={4,1,2,3,4,5};
-			int k1=0,k2=0,k3=0,alpha[48]={0},beta[48]={0},thetha[32]={0},gamma[48]={0},flag[8]={0},tempfreq[8][64]={0}, charboxes[2][5]={1,4,5,6,7,0,1,3,4,5},success=1,count=1;
-			
-			for(int i=0;i<line1.length();i++) //got 64 bit encoding of output for i1o before applying reverse final permutation
-			{
-					int s=line1[i]-'f';
-			    	temp1[4*i+3]=s%2;
-			    	s/=2;
-			    	temp1[4*i+2]=s%2;
-			    	s/=2;
-			    	temp1[4*i+1]=s%2;
-			    	s/=2;
-			    	temp1[4*i]=s%2;			       
-	    	}
-	    	for(int i=0;i<line2.length();i++) //got 64 bit encoding of output for i1xoro before applying reverse final permutation
-			{
-					int s=line2[i]-'f';
-			    	temp2[4*i+3]=s%2;
-			    	s/=2;
-			    	temp2[4*i+2]=s%2;
-			    	s/=2;
-			    	temp2[4*i+1]=s%2;
-			    	s/=2;
-			    	temp2[4*i]=s%2;			       
-	    	}
-
-			for(int i=0;i<64;i++)     		//permutinng the array "temp1" into array "temp" 
-				{	if(i%2==0) 
-						{p=4+ ((i+8)/2)%4;}
-					else 
-						p=((i-1)/2)%4;
-					q=7-(i/8);
-					pos=8*p + q;
-					temp[pos]=temp1[i];
-				}
-
-				for (int i = 0; i < 32; ++i)	//storing temp into l1 and r1
-				{
-					l1[i]=temp[i];
-					r1[i]=temp[i+32];
-				}
-
-				for(int i=0;i<64;i++)     		//permutinng the array "temp2" into array "temp" 
-				{	if(i%2==0) 
-						{p=4+ ((i+8)/2)%4;}
-					else 
-						p=((i-1)/2)%4;
-					q=7-(i/8);
-					pos=8*p + q;
-					temp[pos]=temp2[i];
-				}
-
-				for (int i = 0; i < 32; ++i)		//storing temp into l2 and r2
-				{
-					l2[i]=temp[i];
-					r2[i]=temp[i+32];
-				}
-
-				for(int i=0;i<48;i++)	//applied expansion on 32bit to make it 48bit and store in alpha (input1)
-				{	
-					alpha[i]=r1[expansion[i]-1];
-				}
-				
-				for(int i=0;i<48;i++)		//applied expansion on 32bit to make it 48bit and store in beta (input2)
-				{	
-					beta[i]=r2[expansion[i]-1];
-				}
-
-				for (int i = 0; i < 48; ++i)
-				{
-					gamma[i]=alpha[i]^beta[i]; //XOR before s-boxes (48 bits) stored in gamma
-				}
-
-				int c[32]={0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-				for (int i = 0; i < 32; ++i) //preparing target after sboxes
-				{
-					temp[i]=l1[i]^l2[i]^c[i]; //----------------------------IMPORTANT--------------------- Here 'c' is input characteristic dependant
-				}  
-
-				for (int i = 0; i < 32; ++i) //applying inverse p box 
-				{
-					thetha[pbox[i]-1]=temp[i];
-				}
-
-				for (int s = 0; s < 8; ++s)	//analysis part if input xors and output xors are fixed for s boxes, then find candidate bits for key
-				{
-					for (int n = 0; n < 64; ++n)
-					{	
-						k1=0;
-						for (int i = 0; i < 6; ++i)
-						{
-							k1+=gamma[6*s + i]* pow(2,5-i); //here 'k1' is value of XOR (in integer) before particular 's' box 
-						}
-
-						k2=0;
-						for (int i = 0; i < 6; ++i)
-						{
-							k2+=alpha[6*s + i]* pow(2,5-i);//here 'k2' is value 1 (in integer) before particular 's' box before xoring with the key 6 bit
-						}
-
-						k3=0;
-						for (int i = 0; i < 4; ++i)
-						{
-							k3+=thetha[4*s + i]* pow(2,3-i); //here 'k3' is value (in integer) after particular 's' box
-						}
-
-						if((S[s][feedintobox(n)] ^ S[s][feedintobox(k1^n)])==k3) 
-						{
-							freq[ic][s][n^k2]+=1;		// updating the key candidate database, if valid
-						}
-
-					}
-
-				}
+		int index=permutate_box[i];
+		if(index<32)
+			l[index]=x[i];
+		else
+			r[index-32]=x[i];
 	}
-	}
-	myfile1.close();
-	myfile2.close();
-	 
-	}
-
-	else cout << "Unable to open file"; 
-
-
-	if (myfile3.is_open()&& myfile4.is_open())	// above same program for input characteristic 2
-		{	ic=1;
-		while ( getline (myfile3,line1) && getline (myfile4,line2))
-		{
-		 	if((line1!="")&&(line2!=""))
-			{	
-				int temp1[64],temp2[64],temp[64],l1[32],r1[32],l2[32],r2[32],p,q,pos,arr[6]={4,1,2,3,4,5};
-				int k1=0,k2=0,k3=0,alpha[48]={0},beta[48]={0},thetha[32]={0},gamma[48]={0},flag[8]={0},tempfreq[8][64]={0}, charboxes[2][5]={1,4,5,6,7,0,1,3,4,5},success=1,count=1;
-				
-				for(int i=0;i<line1.length();i++) //got 64 bit encoding of output for i2o before applying reverse final permutation
-				{
-						int s=line1[i]-'f';
-				    	temp1[4*i+3]=s%2;
-				    	s/=2;
-				    	temp1[4*i+2]=s%2;
-				    	s/=2;
-				    	temp1[4*i+1]=s%2;
-				    	s/=2;
-				    	temp1[4*i]=s%2;			       
-		    	}
-		    	for(int i=0;i<line2.length();i++)	//got 64 bit encoding of output for i2xoro before applying reverse final permutation
-				{
-						int s=line2[i]-'f';
-				    	temp2[4*i+3]=s%2;
-				    	s/=2;
-				    	temp2[4*i+2]=s%2;
-				    	s/=2;
-				    	temp2[4*i+1]=s%2;
-				    	s/=2;
-				    	temp2[4*i]=s%2;			       
-		    	}
-
-				for(int i=0;i<64;i++)     		//permutinng the array "temp1" into array "temp" 
-					{	if(i%2==0) 
-							{p=4+ ((i+8)/2)%4;}
-						else 
-							p=((i-1)/2)%4;
-						q=7-(i/8);
-						pos=8*p + q;
-						temp[pos]=temp1[i];
-					}
-
-					for (int i = 0; i < 32; ++i) 		//storing temp into l1 and r1
-					{
-						l1[i]=temp[i];
-						r1[i]=temp[i+32];
-					}
-
-					for(int i=0;i<64;i++)     		//permutinng the array "temp2" into array "temp"  
-					{	if(i%2==0) 
-							{p=4+ ((i+8)/2)%4;}
-						else 
-							p=((i-1)/2)%4;
-						q=7-(i/8);
-						pos=8*p + q;
-						temp[pos]=temp2[i];
-					}
-
-					for (int i = 0; i < 32; ++i)		////storing temp into l2 and r2
-					{
-						l2[i]=temp[i];
-						r2[i]=temp[i+32];
-					}
-
-					for(int i=0;i<48;i++)
-					{	
-						alpha[i]=r1[expansion[i]-1];		//applied expansion on 32bit to make it 48bit and store in alpha (input1)
-					}
-					
-					for(int i=0;i<48;i++)				//applied expansion on 32bit to make it 48bit and store in alpha (input2)
-					{	
-						beta[i]=r2[expansion[i]-1];
-					}
-
-					for (int i = 0; i < 48; ++i)
-					{
-						gamma[i]=alpha[i]^beta[i]; 		//XOR before s-boxes (48 bits) stored in gamma
-					}
-					
-					int c[32]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0};
-					for (int i = 0; i < 32; ++i) //preparing target after sboxes
-					{
-						temp[i]=l1[i]^l2[i]^c[i]; //----------------------------IMPORTANT--------------------- Here 'c' is input characteristic dependant
-					}
-					  
-					for (int i = 0; i < 32; ++i) //applying inverse p box
-					{
-						thetha[pbox[i]-1]=temp[i];
-					}
-
-					for (int s = 0; s < 8; ++s)			//analysis part if input xors and output xors are fixed for s boxes, then find candidate bits for key
-					{
-						for (int n = 0; n < 64; ++n)
-						{	
-							k1=0;
-							for (int i = 0; i < 6; ++i)
-							{
-								k1+=gamma[6*s + i]* pow(2,5-i); //here 'k1' is value of XOR (in integer) before particular 's' box
-							}
-
-							k2=0;
-							for (int i = 0; i < 6; ++i)
-							{
-								k2+=alpha[6*s + i]* pow(2,5-i); //here 'k2' is value 1 (in integer) before particular 's' box before xoring with the key 6 bit
-							}
-
-							k3=0;
-							for (int i = 0; i < 4; ++i)
-							{
-								k3+=thetha[4*s + i]* pow(2,3-i); //here 'k3' is value (in integer) after particular 's' box 
-							}
-
-							if((S[s][feedintobox(n)]^S[s][feedintobox(k1^n)])==k3) 
-							{
-								freq[ic][s][n^k2]+=1; // updating the key candidate database, if valid
-							}
-
-						}
-
-					}
-
-		}
-		}
-		myfile1.close();
-		myfile2.close();
-		 
-		}
-
-		else cout << "Unable to open file"; 
-
+	return;
 }
+void generate_freq(ifstream &f1,ifstream &f2,int c[])
+{
+	string s1,s2; 
+	int v1[64],l1[32],r1[32],l2[32],r2[32],temp[32];
+	int dp[8][64]={0};
+	while(f1&&f2)
+	{
+		getline(f1,s1);
+		getline(f2,s2);
+		
+		bit_encoding(s1,v1);
+		
+		input_forward(v1,l1,r1);
+		
+		bit_encoding(s2,v1);
 
-int main()
-{	
-	func();
+		input_forward(v1,l2,r2);
 
-	int count,max,max2;
-
-	for (int i = 0; i < 2; ++i)			// printing the analysis part for both input characteristics. 
-	{	cout<<"\nInput characteristic "<<i+1<<" results:\n\n"	;								//Note: only obeserve s2,s5,s6,s7,s8 for first characteristics
-		for(int j=0;j<8;j++)					//and s1,s2,s4,s5,s6 for second characteristics
-		{	
-			count=0; max=0; max2=0;
-			
-			for (int k = 0; k < 64; ++k)
+		for (int i = 0; i < 32; ++i)	
+		{
+			temp[pbox[i]-1]=l1[i]^l2[i]^c[i];	
+		}
+		
+		for (int s = 0; s < 8; ++s)	
+		{
+			for (int n = 0; n < 64; ++n)
 			{	
-				count+=freq[i][j][k];
-				
-				if((freq[i][j][k]>freq[i][j][max])&&(freq[i][j][k]>freq[i][j][max2])) {	
-					max2=max;
-					max=k; }
-				else if((freq[i][j][k]<freq[i][j][max])&&(freq[i][j][k]>freq[i][j][max2]))
+				int k1=0,k2=0,k3=0;
+				for (int i = 0; i < 6; ++i)
 				{
-					max2=k;
+					k1+=((r1[expansion[6*s+i]-1]^r2[expansion[6*s+i]-1])*(1<<(5-i)));  
+					k2+=(r1[expansion[6*s+i]-1])*(1<<(5-i));
+					if(i<4)
+						k3+=(temp[4*s + i]*(1<<(3-i))); 
+				}
+				k1^=n;
+				k2^=n;
+				if(((S[s][gen_input_sbox(n)] ^ S[s][gen_input_sbox(k1)])^k3)==0) 
+				{
+					dp[s][k2]+=1;		
 				}
 
 			}
-			
-			cout<<"  "<<max<<"(value)"<<"  "<<freq[i][j][max]<<"(freq.)"<<"  "<<freq[i][j][max2]<<"(second highest freq.)"<<"  "<<(count/64)<<"(avg.freq.)";
-			if((freq[i][j][max]-freq[i][j][max2])>50) cout<<"\t\tGood candidate";
-			cout<<endl;
-		}
-		cout<<endl<<endl;
-	}
 
+		} 
+				
+	}
+	for(int i=0;i<8;i++)
+	{
+		int max_freq=INT_MIN,val;
+		for(int j=0;j<64;j++)
+		{
+			if(max_freq<dp[i][j])
+			{
+				max_freq=dp[i][j];
+				val=j;
+			}
+		}
+		cout<<val<<" ";
+		charkey.push_back(val);
+	}
+	cout<<endl;
+	return;
+}
+		
+string tobinary(int n){
+	if(n<0) return "XXXXXX";
+    string ans ="";
+    while(n>0){
+        ans = to_string(n%2) + ans;
+        n = n/2;
+    }
+    while(ans.size()<6) ans = '0' + ans; 
+    return ans;
+}
+
+		
+int main()
+{
+	ifstream f1 ("new_output1.txt");
+	ifstream f2 ("new_output2.txt");
+	int c1[]={0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+	cout<<"result of 1st characteristics:-only key bits corresponding to s2,s5,s6,s7,s8 is of concerned to us"<<endl;
+	generate_freq(f1,f2,c1);
+	vector<int> arr = {2,5,6,7,8};
+	for(auto i: arr){
+		Key[i-1] = charkey[i-1];
+	}
+	charkey.clear();
+	arr.clear();
+	ifstream f3 ("new_output3.txt");
+	ifstream f4 ("new_output4.txt");
+	int c2[]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0};
+	cout<<"result of 2nd characteristics:-only key bits corresponding to s1,s2,s4,s5,s6 is of concerned to us"<<endl;
+	generate_freq(f3,f4,c2);
+	arr = {1,4};
+	for(auto i: arr){
+		Key[i-1] = charkey[i-1];
+	}	
+	cout<<"\nKey K6 values: ";
+	for(auto i: Key) cout<<tobinary(i)<<" ";
+	cout<<endl;
 	return 0;
 }

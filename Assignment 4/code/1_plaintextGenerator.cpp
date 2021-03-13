@@ -26,10 +26,10 @@ int main(){
     	mydiff2[i] = m1[diff2[i]];
 	}
 
-    ofstream fp1("new_output1.txt");
-    ofstream fp2("new_output2.txt");
-    ofstream fp3("new_output3.txt");
-    ofstream fp4("new_output4.txt");
+    ofstream fp1("i1.txt");
+    ofstream fp2("i1xor.txt");
+    ofstream fp3("i2.txt");
+    ofstream fp4("i2xor.txt");
 
 
     for(int i = 0; i < 1000; i++){
@@ -76,7 +76,7 @@ int main(){
 	
 	    string p2 = "";
 	    for(int j = 0; j < 16; j++){
-	        p2.push_back('f' + (myArray[j] ^ mydiff2[j]));
+	        p2.push_back('f' + (myArray[j] ^ mydiff1[j]));
 	    }
 	    
 	    fp3 << p1 << endl;

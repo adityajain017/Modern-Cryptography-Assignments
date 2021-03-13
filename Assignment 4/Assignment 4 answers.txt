@@ -8,6 +8,9 @@ DES: 6 Round
 
 Analysis
 ---------
+Since it was written in the game screen that it is either 4 round DES or 6 round DES, we tried solving both and found that 6 round DES is cryptosystem used in this level of the game. We also noticed that ciphertexts characters are always from the set $$\{f, g, h, i, ...., s ,t, u\}$$ and since each character represents 4 bits (given in the game screen), we mapped the characters as :
+$$f = 0000;  g = 0001;  h = 0010; ,.......... u = 1111;$$
+
 To break 6 round DES, we applied two 3-round characteristics. 
 First Characteristic:
 -------------------
@@ -61,10 +64,10 @@ S6: 000101
 Bruteforcing unknown bits of the Key
 --------------------------
 So now we have 42 out of 48 bits of the key $$k_6$$:  
-010101 010001 XXXXXX 010011 110010 000101 010011 000100
+101101 110011 XXXXXX 000111 010101 010110 001100 111110
 
 We then applied Permuted Choice 2 (PC2) and shift[] matrix on this obtained $$k_6$$ to obtain the following 56 bits of the key of DES: 
-X11X1X0 1011X10 0X11X11 0000001 0101110 0010111 101011X XXXXXXX
+X11XX1X X01011X 100XX11 X11000X 0001010 X111000 10X11X1 101X011
 
 We generated all $$2^{14}$$ possible keys by iterating over all 14 unknown bits. We have the plaintext-ciphertext pair ’ffffffff ffffffff’ - 'qfpouphs gqnmkfkg' respectively. We then encode the plaintext ’ffffffff ffffffff’ with every possible key combination. The following key generated the ciphertext 'qfpouphs gqnmkfkg' and hence it is the key used by the game.
 Key (56 bit) = 0110111 0010111 1001111 0110000 0001010 0111000 1011111 1011011 

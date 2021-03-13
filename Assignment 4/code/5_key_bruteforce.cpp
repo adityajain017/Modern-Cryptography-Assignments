@@ -14,7 +14,7 @@ int main(){
     46, 42, 50, 36, 29, 32
 	};
 	
-	string str1 = "010101010001XXXXXX010011110010000101010011000100";
+	string str1 = "101101110011XXXXXX000111010101010110001100111110";
 	string str2 = "";
 	for(int i = 0; i < 56; i++){
 		str2.push_back('X');
@@ -41,6 +41,7 @@ int main(){
                        str2[28] = b;
 		}
 	}
+	cout<<"\n56 bit Key (14 bits unknown): "<<str2<<endl<<endl;
 	
 	ofstream fp1("key_out.txt");
 	for(int i = 0; i < 16384; i++){
