@@ -1,90 +1,92 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int hexCharToInt(char a){	//change 0-f to 0-15
-    if(a>='0' && a<='9')
-        return(a-48);
-    else if(a>='A' && a<='Z')
-        return(a-55);
-    else
-        return(a-87);
-}
+int main(){
 
-char IntToChar(int a)	//change 0-15 to 0-f
-{
-	if(a>-1 && a<10) return (char)(a+48);
-	else return ('a'-10+a);
-}
-
-int main()
-{
-
-	long long int rand_no,j=0;
-	string inputdiff1="0000801000004000";
-	string inputdiff2="0000080101000400";
-	ofstream myfile1 ("i1xor.txt");
-	ofstream myfile2 ("i2xor.txt");
-
-	char a[16];
-	char b[16]={'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
-	FILE *fr1;
-	FILE *fr2;
-	fr1 = fopen("i1.txt","w+");
-	fr2 = fopen("i2.txt","w+");
-
-
-	while(j < 1000)
+    unordered_map<char, int> m1 = 
 	{
-		std::stringstream XORString;
+	    {'0', 0}, {'1', 1}, {'2', 2}, {'3', 3}, {'4', 4}, {'5', 5}, {'6', 6}, {'7', 7}, {'8', 8}, {'9', 9},
+        {'a', 10}, {'b', 11}, {'c', 12}, {'d', 13}, {'e', 14}, {'f', 15}
+    };
 
-		for (int i = 0; i < 16; i++)
-		  {
-		    rand_no = rand()%16;
-		    a[i] = b[rand_no];
-		  }
-		for (int i = 0; i < 16; i++)
-		    fprintf(fr1, "%c",(hexCharToInt(a[i])+'f'));
-			
-		fprintf(fr1, "\n");
+    unordered_map<int, char> m2 = 
+    {
+        {0, '0'}, {1, '1'}, {2, '2'}, {3, '3'}, {4, '4'}, {5, '5'}, {6, '6'}, {7, '7'}, {8, '8'}, {9, '9'},
+        {10, 'a'}, {11, 'b'}, {12, 'c'}, {13, 'd'}, {14, 'e'}, {15, 'f'}
+    };
 
-		for(int i=0;i<16;i++)
-			{
-				myfile1<<char('f'+(hexCharToInt(a[i])^hexCharToInt(inputdiff1[i]))) ; 
-			}
-			myfile1<<'\n';
-
-		j++;
+    string diff1 = "0000801000004000";
+    int mydiff1[16];
+    for(int i = 0; i < 16; i++){
+    	mydiff1[i] = m1[diff1[i]];
 	}
-	myfile1.close();
+    string diff2 = "0000080101000400";
+    int mydiff2[16];
+    for(int i = 0; i < 16; i++){
+    	mydiff2[i] = m1[diff2[i]];
+	}
 
-	j=0;
+    ofstream fp1("new_output1.txt");
+    ofstream fp2("new_output2.txt");
+    ofstream fp3("new_output3.txt");
+    ofstream fp4("new_output4.txt");
 
-	while(j < 1000)
-	{
-	std::stringstream XORString;
 
-	for (int i = 0; i < 16; i++)
-	  {
-	    rand_no = rand()%16;
-	    a[i] = b[rand_no];
-	  }
-	for (int i = 0; i < 16; i++)
-	    fprintf(fr2, "%c",(hexCharToInt(a[i])+'f'));
+    for(int i = 0; i < 1000; i++){
+	    string str = "";
+	    for(int j = 0; j < 16; j++){
+	        str.push_back(m2[(rand() % 16)] );
+	    }
+	    
+	    int myArray[16];
+	    for(int j = 0; j < 16; j++){
+	    	myArray[j] = m1[str[j]];
+	    }
 		
-	fprintf(fr2, "\n");
+	    string p1 = "";
+	    for(int j = 0; j < 16; j++){
+		    p1.push_back('f' + myArray[j]);
+	    }
+	
+	    string p2 = "";
+	    for(int j = 0; j < 16; j++){
+	        p2.push_back('f' + (myArray[j] ^ mydiff1[j]));
+	    }
+	    
+	    fp1 << p1 << endl;
+	    fp2 << p2 << endl;
+    }
 
-	for(int i=0;i<16;i++)
-	{
-			myfile2<<char('f'+(hexCharToInt(a[i])^hexCharToInt(inputdiff1[i]))) ;    
-	}
-		myfile2<<'\n';
 
-	j++;
-	}
-	myfile2.close();
+    for(int i = 0; i < 1000; i++){
+	    string str = "";
+	    for(int j = 0; j < 16; j++){
+	        str.push_back(m2[(rand() % 16)] );
+	    }
+	    
+	    int myArray[16];
+	    for(int j = 0; j < 16; j++){
+	    	myArray[j] = m1[str[j]];
+	    }
+		
+	    string p1 = "";
+	    for(int j = 0; j < 16; j++){
+		    p1.push_back('f' + myArray[j]);
+	    }
+	
+	    string p2 = "";
+	    for(int j = 0; j < 16; j++){
+	        p2.push_back('f' + (myArray[j] ^ mydiff2[j]));
+	    }
+	    
+	    fp3 << p1 << endl;
+	    fp4 << p2 << endl;
+    }
 
-fclose(fr1);
-fclose(fr2);
 
-return 0;
+    fp1.close();
+    fp2.close();
+    fp3.close();
+    fp4.close();
+    return 0;
 }

@@ -10,7 +10,10 @@ rm output1.txt output2.txt output3.txt output4.txt
 g++ 4_round3Characteristics.cpp -o 4_round3Characteristics
 ./4_round3Characteristics
 
-python3 5_key_bruteforce.py
+g++ 5_key_bruteforce.cpp -o 5_key_bruteforce
+./5_key_bruteforce
+
+# python3 5_key_bruteforce.py
 
 g++ 6_DES_bruteforce.cpp -o 6_DES_bruteforce
 ./6_DES_bruteforce
