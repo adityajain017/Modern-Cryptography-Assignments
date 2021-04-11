@@ -1,0 +1,52 @@
+Commands
+----------
+exit1->exit2->exit4->exit3->exit1->exit4->exit4->exit2->exit2->exit1->read
+
+
+Coded Message at each chamber
+----------------------------
+Code						Decoded text
+59 6f 75 20 73 65 65 20				exit2
+61 20 47 6f 6c 64 2d 42				exit4
+75 67 20 69 6e 20 6f 6e				exit3
+65 20 63 6f 72 6e 65 72				exit1
+2e 20 49 74 20 69 73 20				exit4
+74 68 65 20 6b 65 79 20				exit4
+74 6f 20 61 20 74 72 65				exit2
+61 73 75 72 65 20 66 6f				exit2
+75 6e 64 20 62 79				exit1
+
+
+Analysis
+---------
+We are given a RSA encrypted cipher message c and exponent value, e is equal to 5. The n is of size 308 (in decimal) i.e. equal to 1024 bits in binary. Since n is too large, so factorisation is not an option nor we can find $$\phi(n) = (p - 1)(q - 1)$$.
+encryption : c = m^e mod n
+decryption : m = c^d mod n
+
+The RSA we have is a bit relaxed as the exponent is small i.e. 5 so we applied coppersmith's algorithm to break the cipher. 
+Coppersmith's Algorithm says: Let N be a positive integer and $$f (x) \in Z[x]$$ be a monic, degree d polynomial. If n and f are given, then one can efficiently find all integers x such that $$f(x) = 0 \mod N$$ and $$x = N^{1/d−\epsilon}$$ , for some $$epsilon > 0$$. 
+This algorithm uses LLL Lattice Reduction Technique to construct polynomials with small coefficients and all will have the same root x_0 over modulo N^(1/e) and any linear combination of these will have the same root.
+                                $$f(m) = m^e - c  \mod n$$                  - (1)
+
+We checked whether some padding is added to the message m before encryption or not by calculating $$c^{1/e}$$. We concluded that padding is used. 
+
+In the game, on the path to reach the final chamber, we observed some hexadecimal digits on each chamber. We converted all of them to ASCII text and got the following message:
+"You see a Gold-Bug in one corner. It is the key to a treasure found by "
+
+We treated the above sentence as padding p, and updated the equation (1) as follows:
+                                 $$f(m) = (m+p)^e - c  \mod n$$             - (2)
+{where m is the polynomial ring of integers over mod n.}
+
+To solve equation (2), we wrote the code "rsa.ipynb". Since we do not know the length of m, but we know that $$m < N^{1/e}$$, i.e. approximately equal to 200 bits. So we brute-forced coppersmith's algorithm for each possible length of m. We assumed m to be a multiple of 8 (1 byte), and hence iterated 0 bits to 200 bits with an increment of 8 bits.
+
+Root value calculated by the code: 
+00110101 00111001 00110101 00110000 00110110 00111001 00110111 00110100 00110000 00111000 00110001 00110111 00110000 00111000 00110111 00110010 00111001 00110100 00110100 00111001 00110111
+ 
+We converted the above root into the following decrypted password by considering them to 8 bit ASCII values:
+B@hubAl!
+
+Password
+----------
+B@hubAl!
+
+
