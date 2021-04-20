@@ -30,17 +30,30 @@ This algorithm uses LLL Lattice Reduction Technique to construct polynomials wit
 
 We checked whether some padding is added to the message m before encryption or not by calculating $$c^{1/e}$$. We concluded that padding is used. 
 
-In the game, on the path to reach the final chamber, we observed some hexadecimal digits on each chamber. We converted all of them to ASCII text and got the following message:
-"You see a Gold-Bug in one corner. It is the key to a treasure found by "
+In the game, on the path to reach the final chamber, we observed some hexadecimal digits on each chamber. We converted all of them to ASCII text as shown in the below table:
+Hexadecimal code              ->    Decoded message
+-----------------------------                   ----------------------------
+59 6f 75 20 73 65 65 20    ->   You see 
+61 20 47 6f 6c 64 2d 42     ->   a Gold-B
+75 67 20 69 6e 20 6f 6e    ->   ug in on
+65 20 63 6f 72 6e 65 72    ->   e corner
+2e 20 49 74 20 69 73 20   ->   . It is 
+74 68 65 20 6b 65 79 20   ->   the key 
+74 6f 20 61 20 74 72 65     ->   to a tre
+61 73 75 72 65 20 66 6f     ->   asure fo
+75 6e 64 20 62 79             ->    und by
 
-We treated the above sentence as padding p, and updated the equation (1) as follows:
+On joining the above-decoded texts, we got the following message:
+"You see a Gold-Bug in one corner. It is the key to a treasure found by"
+
+We treated the above sentence as padding p (in binary), and updated the equation (1) as follows:
                                  $$f(m) = (m+p)^e - c  \mod n$$             - (2)
 {where m is the polynomial ring of integers over mod n.}
 
 To solve equation (2), we wrote the code "rsa.ipynb". Since we do not know the length of m, but we know that $$m < N^{1/e}$$, i.e. approximately equal to 200 bits. So we brute-forced coppersmith's algorithm for each possible length of m. We assumed m to be a multiple of 8 (1 byte), and hence iterated 0 bits to 200 bits with an increment of 8 bits.
 
 Root value calculated by the code: 
-00110101 00111001 00110101 00110000 00110110 00111001 00110111 00110100 00110000 00111000 00110001 00110111 00110000 00111000 00110111 00110010 00111001 00110100 00110100 00111001 00110111
+100000 01000010 01000000 01101000 01110101 01100010 01000001 01101100 00100001
  
 We converted the above root into the following decrypted password by considering them to 8 bit ASCII values:
 B@hubAl!

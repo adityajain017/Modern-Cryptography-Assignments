@@ -1,0 +1,163 @@
+[3;J[H[2J
+
+		WELCOME TO THE CAVES!
+
+		Enter your group name: Toddlers
+Mohit9638@
+7
+go
+go
+go
+go
+go
+give
+read
+
+
+		Enter password: 
+
+
+You have solved 6 levels so far.
+Level you want to start at: [3;J[H[2J
+
+
+
+	You enter a narrow, rocky passage. You are relived to note that it has
+	only one exit, at a short distance away. The passage has a couple of
+	lighted torches showing the path but the light is not very bright.
+	You notice that the exit has a door that is closed. The door seems to
+	be made of wood and there is no panel next to it. Going closer, you
+	realize that indeed there is no panel next to the door. There is instead
+	a door-handle. You turn the handle and push slightly. The door opens
+	a little... suddenly, you hear spirit whispering something urgent in
+	your ears but cannot understand. Equally suddenly, the whispering voice
+	stops and there is complete silence. You feel as if the spirit has
+	taken flight... you do not sense it at all. All this makes you a little
+	hesitant in going through the door. What is it at the other side... you
+	wonder.
+> [3;J[H[2J
+
+
+
+	You decide you explore and push the door open. You see a proper
+	room with a bed, a table, and a chair! The room is lighted through
+	a small torch burning at one of the walls. Suddenly you realize
+	that someone is sleeping on the bed!! Gathering yourself after the
+	initial shock, you quietly move over to the bed and see a tall man
+	soundly sleeping. He has short, black hair and a squarish face.
+	He is snoring slightly. Who is this man? And how did he end up
+	here? Maybe he is another explorer who got tired and is taking
+	a quick nap, you reason. Thinking of this makes you aware of your
+	own tiredness. You too can do with some rest you think. Steeling
+	yourself against it, you step back and look around the room.
+	You notice another door at the other end. The door is ajar.
+
+> [3;J[H[2J
+
+
+
+	
+	You move towards the door. Before opening it, you turn back to see
+	the sleeping man (maybe to verify that you were not dreaming!).
+	He is now sitting up on the bed, staring at you. His eyes appear
+	completely blank.
+
+	"Hello", you say. The man just stares at you.
+
+	"Er, I am looking for a way out of here." You continue.
+	"Do you know which way to go?" No answer.
+
+	"How did you come here?" You try once more. The eyes just got
+	blanker. You start getting worried.
+
+	"Are you alright?" Your monologue goes on. "Do you need some help?"
+	The eyes flash all of a sudden, and the man turns and runs out
+	of the room (from the door you came in). Going after him, you
+	too cross the door coming out in the passage. Nothing. The man
+	simply vanished. Not willing to go back into the maze again, you
+	reenter the room.
+
+> [3;J[H[2J
+
+
+
+	The room has a bed, a table, and a chair. The room is lighted through
+	a small torch burning at one of the walls. The bed has slightly
+	crumpled sheet. There is another door at the other end. The door is ajar.
+
+> [3;J[H[2J
+
+
+
+	You come out to a corridor. You decide to go ahead. The corridor turns upward.
+	After a while, it gets steeper. Eventually, it becomes so steep that you
+	find hard to take even a single step. Doggedly, you keep walking...
+	You see the end of the climb ahead you. Feeling elated, you increase your
+	speed to reach it quickly...
+	You come out at a small clearing that is enclosed on three sides with
+	rough stone walls. On one of the walls there is a door made of wood.
+	There is no handle on it and no panel next to it. How does one go through
+	this, you wonder. You try pushing the door, and it moves!
+
+> [3;J[H[2J
+
+
+
+	The door leads to a wide room. There are a number of torches proving light.
+	You see a shadow on the floor. Looking in its direction, you find the man
+	with blank eyes standing at one corner of the room. His eyes are no longer
+	blank though. They are shining, and he has a slight smile on his face.
+
+	"Who are you?" you ask.
+
+	"I are the creater of these caves", says the man.
+
+	"Why did you do it?"
+
+	"I like to stay at a quite place. And I dislike intrusions."
+
+	"Er, sorry, I didn't ...", you are not sure what to say.
+	The eyes are now shining even more. You detect anger in them.
+	His right hand moves, and you see a wand in his hands. You sense
+	he is about to do something unpleasent.
+
+> [3;J[H[2J
+
+
+
+	You quickly take out your wand and offer it to the man.
+	He stops in the middle of a weave of his wand.
+
+	"What!?" he sounds confused.
+
+	"Take it", you say.
+
+	"Ah... this is my long-lost wand! Er, thanks. You can go.
+	But never come back!"
+
+	Saying this, the man grabs your wand, turns, and vanishes!
+	You see a door at the other end of the room. Quickly, you 
+	go and pull it...
+	
+	... But it does not open. After wasting some time and effort 
+	on opening it, comes the realization that it is locked.
+	And of course, there is a panel next to it which you did
+	not notice in your haste to get out.
+
+> [3;J[H[2J
+
+	You see the following written on the panel:
+
+	696462E8000000000680880461E16C686FEEEBEE61E16C68068A890661E16C68
+	000A010200000000068A890661E16C68696E63EA00000000696462E800000000
+
+	As you wonder what do these numbers mean, you hear a whisper in your ears ...
+	"I am so happy that he went away without noticing me. He is the one who bound
+	me to the hole. Oh, I was so scared that he will notice me!
+
+	You must be wondering about these numbers. This is the hash value of your password
+	which is created by a toy version of SHA3. This version of SHA3 has only three step mappings:
+	Theta, Pi, Chi. Also, the password is no more than 16 characters.
+
+
+Press c to continue> 
