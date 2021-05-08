@@ -1,3 +1,5 @@
+Didn't attempt this assignment as it was optional.
+
 Commands
 ----------
 go->go->go->go->go->give->read

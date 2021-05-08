@@ -2,6 +2,7 @@ Cipher Text Space
 ------------------
 {Mewa, wa, mey, twsam, iepjoys, gt, ipbya., Pa, xgn, iph, ayy,, meysy, hgmewhr, whmysyam, wh, iepjoys., Agjy, kpmys, iepjoysa, vwkk, oy, jgsy, whmysyamwhr, meph, mewa, ghy!, Mey, iguy, nayu, tgs, jyaapry, p, awjfky, anoamwmnmwgh, iwfeys, vewie, uwrwma, epby, oyyh, aewtmyu, ox, 8, fkpiya., fpaavgsu, mxSrN03uwdd, vwmegnm, dngmya.}
 
+
 Plain Text Space
 -------------------------
 {This, is, the, first, chamber, of, caves., As, you, can, see,, there, nothing, interest, in, chamber., Some, later, chambers, will, be, more, interesting, than, this, one!, The, code, used, for, message, a, simple, substitution, cipher, which, digits, have, been, shifted, by, 8, places., password, tyRgU03diqq, without, quotes.}

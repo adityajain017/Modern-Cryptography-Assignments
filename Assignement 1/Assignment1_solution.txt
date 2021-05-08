@@ -120,7 +120,7 @@ Plain text -> Cipher text
 	v  ->   b
 	6  ->   0
 	9  ->   3
-
+	4  ->   8
 
 Password
 ----------

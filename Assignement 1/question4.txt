@@ -1,0 +1,20 @@
+
+Alphabet definitions,A={'a','b','c',...,'z',0,1,2,..,9,'A','B','C',....,'Z'}.
+
+Cipher text space ={'wsam','ie','pjo','ysgtm','eyipbya','P','axg','niphay','y','mey',
+		     'syw','ahgm','ewhrg','tw','hmysyam','wh','meyiepjo','ys',
+		     'Ag','jygtmeyk','pmys','ie','pjo','ysavw','kkoyjgsy','whmy','sy'
+		     'amwh','rmephmewagh','y','Me','yigu','ynay','utg','smew','ajya'
+		     'apr','ywap','awjfkya','no','a','mwmnmw','ghiwfeyswhve','wieuwr',
+		     'wm','aepby','oyyhae','wtmy','uox8','fkpiya','Me','y','fpaavgs',
+		     'uwa','mxSrN03u','wd','dvwmegnmmey','dngmya','Mew','awameyt'}.
+
+
+Plain text space ={'irst','ch','amb','eroft','hecaves','A','syo','ucanse','e','the',
+                    'rei','snot','hingo','fi','nterest','in','thechamb','er',
+		     'So','meofthel','ater','ch','amb','erswi','llbemore','inte','re',
+		    'stin','gthanthison,'e','Th','ecod','euse','dfo','rthi',
+		    'smes','sag','eisa','simples','ub','s','tituti','oncipherinwh','ichdig'
+		    'it','shave','beensh','ifte','dby8','places','Th','e','passwor'
+		    'dis','tyRgU03d','iq','qwithoutthe','quotes','Thi','sisthef'}
+		     
